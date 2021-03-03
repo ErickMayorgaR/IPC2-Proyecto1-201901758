@@ -18,7 +18,7 @@ def cargar_archivo():
     # ruta.filename = filedialog.askopenfilename(filetypes=(("XML files", "*.xml"), ("all files", "*.*")))
     # file = open(ruta.filename, "r", encoding='utf-8')
     global file
-    file = 'C:/Users/emayo/OneDrive/Desktop/IPC2-Proyecto1-201901758/Matriz.xml'
+    file = 'C:/Users/emayo/OneDrive/Desktop/IPC2-Proyecto1-201901758/Matriz2.xml'
 
     print(file)
     # ruta.destroy()
