@@ -6,6 +6,7 @@ from Logica import Logica
 file = ''
 global puedo_cargar
 puedo_cargar =False
+
 analizar_archivo = Logica()
 
 
@@ -18,25 +19,30 @@ def cargar_archivo():
     # ruta.filename = filedialog.askopenfilename(filetypes=(("XML files", "*.xml"), ("all files", "*.*")))
     # file = open(ruta.filename, "r", encoding='utf-8')
     global file
-    file = 'C:/Users/emayo/OneDrive/Desktop/IPC2-Proyecto1-201901758/Matriz2.xml'
+    file = 'C:/Users/emayo/OneDrive/Desktop/IPC2-Proyecto1-201901758/Matriz.xml'
 
     print(file)
     # ruta.destroy()
 
 
 def procesar_archivo():
-
     if puedo_cargar == True:
         analizar_archivo.operaciones(file)
-
     else:
         print("Por favor ingrese una ruta de carga")
 
 
 
-def generar_graficas():
-    ir_seleccion.tokens_errores()
-    print("algo")
+def escribir_salida():
+    analizar_archivo.escribisalida()
+
+
+def mostrar_datos_estudiantes():
+    print("Erick Ivan Mayorga Rodriguez")
+    print("201901758")
+    print("Introducción a la programacion y Computacion 2 Sección D")
+    print("Ingenieria en Ciencias y Sistemas")
+
 
 
 
@@ -61,11 +67,10 @@ def main_menu():
         opcion = int(input())
         if opcion == 1:
             cargar_archivo()
-
         elif opcion == 2:
             procesar_archivo()
         elif opcion == 3:
-            salir()
+            escribir_salida()
         elif opcion == 4:
             generar_graficas()
         elif opcion == 5:

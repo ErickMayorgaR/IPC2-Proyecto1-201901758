@@ -1,13 +1,12 @@
-from NodoElemento import Elemento
+from Nodofilas import datosFila
 
-class ListaElementos:
+class ListaS:
     def __init__(self):
         self.primero = None
 
 
-    def insertar(self, Elemento):
-
-        unNodo = Elemento
+    def insertar(self,dato):
+        unNodo = datosFila(dato)
         if self.primero == None:
             self.primero= unNodo
         else:
@@ -16,7 +15,3 @@ class ListaElementos:
                 temp = temp.siguiente
             temp.siguiente = unNodo
             unNodo.anterior = temp
-
-
-
-

@@ -5,15 +5,19 @@ class listaCircularM:
         self.primero = None
         self.ultimo = None
 
-    def insertar(self, nombre, filas, columnas):
-        unNodoCircular = Matriz(nombre, filas, columnas)
+    def insertaralfinal(self, Matriz):
         if self.primero == None:
-            self.primero = self.ultimo = unNodoCircular
+            self.primero = self.ultimo = Matriz
+            self.ultimo.siguiente = self.primero
         else:
-            temp = unNodoCircular
-            temp.siguiente = self.primero
-            self.primero = temp
-            self.ultimo.siguiente= self.primero
+            temp = self.ultimo
+            self.ultimo = temp.siguiente = Matriz
+            self.ultimo.siguiente = self.primero
+            
+
+    #def reducir(self):
+
+        
 
 
 
