@@ -7,21 +7,31 @@ from NodoPaReducir import nodoUtil
 from Nodofilas import datosFila
 from ListaSimple import ListaS
 from NodoElemento import Elemento
+from CrearXML import unXML
 
 class Logica:
-    lista_matrices_reducidas = ListaS()
+    el_XML = unXML()
+    lista_matrices_reducidas = listaCircularM()
+    lista_Red = ListaS()
+    listaFrecuencias = None
     lista_matrices = None
     columnas = None
     filas = None
+
+    def mandar_grafica(self):
+        self.el_XML.graficarMatriz()
+
 
     def operaciones(self, nombrexml):
         arbol = ET.parse(nombrexml)
         raiz = arbol.getroot()
         self.lista_matrices = listaCircularM()
 
-
+        print("Almacenando Matrices")
+        print("Convirtiendo elementos de XML en objetos y variables")
         for matriz in raiz:
 
+            numerodatos = 0
             elemen = ListaElementos()
             contador = 0
             nombre = ''
@@ -40,6 +50,7 @@ class Logica:
 
 
             for elemento in matriz:
+
                 contaratdato = 0
                 x = ''
                 y = ''
@@ -55,6 +66,7 @@ class Logica:
                         elif contaratdato == 2:
                             y = atributodato
 
+                numerodatos += 1
                 unElemento = Elemento(elemento.text, x, y)
 
                 if elemento.text == '0':
@@ -65,6 +77,10 @@ class Logica:
                 elemen.insertar(unElemento)
             matriz_aux = Matriz(nombre,filas, columnas, elemen)
             self.lista_matrices.insertaralfinal(matriz_aux)
+            if numerodatos != (int(filas)*int(columnas)):
+                print("Existe un elemento Matriz el cual no cuenta \n con la cantidad de datos que expresean su arreglo de  filas y columnas")
+                break
+        print("Se termino de analizar el archivo")
         var = 'solo pal debuger'
 
     def escribisalida(self):
@@ -76,14 +92,19 @@ class Logica:
             matriz_aux = inicioM
             self.reducirMatriz(matriz_aux, matriz_aux.filas, matriz_aux.columnas)
 
-            print(inicioM.nombre)
+            #print(inicioM.nombre)
             inicioM = inicioM.siguiente
 
             if inicioM == lista_aux.primero:
                 unrecorridoLM = True
 
-    def reducirMatriz(self, Matriz, filas, columnas):
+        self.lista_matrices_reducidas = self.convertirEnListaMatriz(self.lista_Red)
+        varaux = self.lista_matrices_reducidas
 
+        self.el_XML.elementoRaiz(varaux)
+
+    def reducirMatriz(self, Matriz, filas, columnas):
+        nombre = Matriz.nombre
         filasn = int(filas)
         columnasn = int(columnas)
         self.filas = filasn
@@ -113,6 +134,7 @@ class Logica:
         #sumar = ListaFilas()
 
         listaRed = ListaS()
+        listaRed.nombre = nombre
         listaFreq = ListaS()
         a_comparar = listacomparar.primero
         fila_aux2 = a_comparar
@@ -133,7 +155,7 @@ class Logica:
             filas_sumar = ListaS()
 
             contadorSaltados = 0
-            contadorFrecuencia = 0
+            contadorFrecuencia = 1
             mandoSumar = False
 
 
@@ -146,7 +168,7 @@ class Logica:
                 else:
                     varcomp = a_comparar.comparaFila.primero
                     varfilaux = fila_aux.comparaFila.primero
-                    for i in range (1, columnasn):
+                    for i in range (1, columnasn+1):
                         if soniguales != False:
                             if varcomp.dato == varfilaux.dato:
                                 soniguales = True
@@ -178,8 +200,8 @@ class Logica:
                 if fila_aux.siguiente == None:
                     fila_auxn = fila_aux
                 fila_aux = fila_aux.siguiente
-                print("llega?")
-                print("algebugg")
+                #print("llega?")
+                #print("algebugg")
 
             if mandoSumar == False:
                 yaseuso = None
@@ -195,9 +217,16 @@ class Logica:
             while fila_aux.anterior != None:
                 fila_aux = fila_aux.anterior
             contadorPrimera = 0
-            listaFreq.insertar(contadorFrecuencia)
-        self.lista_matrices_reducidas.insertar(listaRed  )
-        print("debbug")
+            if contadorFrecuencia > 1:
+                listaFreq.insertar(contadorFrecuencia)
+
+            contadorFrecuencia = 1
+        listaRed.frecuencias = listaFreq
+        listaRed.columnas = columnasn
+        listaRed.filas = filasn
+        self.lista_Red.insertar(listaRed)
+        #self.listaFrecuencias = listaFreq
+        #print("debbug")
 
     def filas_sumar(self, hayquesumar):
         datosFila = ListaS()
@@ -258,22 +287,39 @@ class Logica:
         return unaFilaUsada
 
 
+    def convertirEnListaMatriz(self, listaConvertir):
+        #ListaReducida = Matriz()
+        UnaListaElementos = ListaElementos()
+        #ElementoMatriz = Elemento()
+        unaListaMatrizRed = listaCircularM()
+        contadorFila = 0
+        contadorColumna = 0
+
+        listaConvertir_aux = listaConvertir.primero
+
+        while listaConvertir_aux != None:
+            contadorFila = 0
+            listaFilas_aux = listaConvertir_aux.dato.primero
+
+            while listaFilas_aux != None:
+                contadorColumna = 0
+                contadorFila +=1
+                datosEnFila = listaFilas_aux.dato.primero
+                for i in range(1, (int(listaConvertir_aux.dato.columnas)+1)):
+                    contadorColumna += 1
+                    unElemento = Elemento(datosEnFila.dato,str(contadorFila),str(contadorColumna))
+                    UnaListaElementos.insertar(unElemento)
+                    datosEnFila = datosEnFila.siguiente
+                listaFilas_aux  = listaFilas_aux.siguiente
 
 
 
+            MatrizRed = Matriz(listaConvertir_aux.dato.nombre, contadorFila, contadorColumna, UnaListaElementos)
+            MatrizRed.frecuencias = listaConvertir_aux.dato.frecuencias
+            unaListaMatrizRed.insertaralfinal(MatrizRed)
+            UnaListaElementos = ListaElementos()
+            listaConvertir_aux = listaConvertir_aux.siguiente
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return unaListaMatrizRed
 
 

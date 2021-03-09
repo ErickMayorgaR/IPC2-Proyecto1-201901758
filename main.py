@@ -15,14 +15,15 @@ def cargar_archivo():
     global puedo_cargar
     puedo_cargar= True
 
-    # ruta = Tk()
-    # ruta.filename = filedialog.askopenfilename(filetypes=(("XML files", "*.xml"), ("all files", "*.*")))
-    # file = open(ruta.filename, "r", encoding='utf-8')
+    ruta = Tk()
+    ruta.filename = filedialog.askopenfilename(filetypes=(("XML files", "*.xml"), ("all files", "*.*")))
     global file
-    file = 'C:/Users/emayo/OneDrive/Desktop/IPC2-Proyecto1-201901758/Matriz.xml'
+    file = open(ruta.filename, "r", encoding='utf-8')
 
-    print(file)
-    # ruta.destroy()
+    #file = 'C:/Users/emayo/OneDrive/Desktop/IPC2-Proyecto1-201901758/Matriz2.xml'
+
+    #print(file)
+    ruta.destroy()
 
 
 def procesar_archivo():
@@ -43,6 +44,9 @@ def mostrar_datos_estudiantes():
     print("Introducción a la programacion y Computacion 2 Sección D")
     print("Ingenieria en Ciencias y Sistemas")
 
+def graficar():
+    analizar_archivo.mandar_grafica()
+
 
 
 
@@ -62,7 +66,7 @@ def opciones():
 
 def main_menu():
     opcion = -1
-    while opcion != 4:
+    while opcion != 6:
         opciones()
         opcion = int(input())
         if opcion == 1:
@@ -72,10 +76,10 @@ def main_menu():
         elif opcion == 3:
             escribir_salida()
         elif opcion == 4:
-            generar_graficas()
+            mostrar_datos_estudiantes()
         elif opcion == 5:
-            salir()
-        elif opcion == 5:
+            graficar()
+        elif opcion == 6:
             salir()
         else:
             print("Algo")
